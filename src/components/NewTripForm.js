@@ -10,7 +10,7 @@ const NewTripForm = (props) => {
         <Header as="h3">Start Planning New Trip</Header>
         <Form.Field>
           <label>Location</label>
-          <input onChange={(e) => props.handleChange(e)} name="triplocation" value={props.triplocation} placeholder='City' />
+          <input onChange={(e) => props.handleChange(e)} name="location" value={props.location} placeholder='City' />
         </Form.Field>
         <Form.Field>
           <label>Start Date</label>

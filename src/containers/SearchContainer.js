@@ -22,15 +22,16 @@ const SearchContainer = (props) => {
         <Form.Field>
           <label>Location</label>
           <input
-            onChange={(e) => props.handleChange(e)}
+            // onChange={(e) => props.handleChange(e)}
             name="location"
             value={props.location}
-            placeholder='new york city'
+            placeholder={props.location}
           />
         </Form.Field>
         <Button type='submit' onClick={props.handleSubmit}>Search</Button>
+        <Button>Done with Selections</Button>
       </Form>
-      <SearchList returnedRestaurants={props.returnedRestaurants}/>
+      <SearchList returnedRestaurants={props.returnedRestaurants} addEventToTrip={props.addEventToTrip} usertrip={props.usertrip}/>
     </Container>
   </div>
   )

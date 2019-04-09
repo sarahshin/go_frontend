@@ -10,7 +10,7 @@ const TripContainer = (props) => {
     { !props.formSubmitted ?
       <NewTripForm
         handleChange={props.handleChange}
-        triplocation={props.triplocation}
+        location={props.location}
         startdate={props.startdate}
         enddate={props.enddate}
         createTrip={props.createTrip}
@@ -22,6 +22,8 @@ const TripContainer = (props) => {
         location={props.location}
         handleChange={props.handleChange}
         handleSubmit={props.handleSubmit}
+        addEventToTrip={props.addEventToTrip}
+        usertrip={props.usertrip}
       />
     }
 

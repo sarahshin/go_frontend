@@ -1,24 +1,29 @@
 import React from "react"
 import { Card, Image, Button } from "semantic-ui-react"
 
-const SearchItem = (props) => {
+const SearchItem = ({ restaurant, addEventToTrip, usertrip }) => {
 
   const displayAddress = () => {
-    return props.restaurant.location.display_address.map(line => {
+    return restaurant.location.display_address.map(line => {
       return <p>{line}</p>
     })
   }
+
+  // const handleAdd = (restaurant) => {
+  //   addEventToTrip(restaurant)
+  // }
+
   return (
   <Card>
     <Card.Content>
-      <Image src={props.restaurant.image_url} alt="image" style={{width:'300px'}}/>
-      <h4>{props.restaurant.name}</h4>
-      <h5>{props.restaurant.price}</h5>
-      <h5>{props.restaurant.rating}</h5>
+      <Image src={restaurant.image_url} alt="image" style={{width:'300px'}}/>
+      <h4>{restaurant.name}</h4>
+      <h5>{restaurant.price}</h5>
+      <h5>{restaurant.rating}</h5>
       {displayAddress()}
-      <a href={props.restaurant.url}>view on yelp</a>
+      <a href={restaurant.url}>view on yelp</a>
     </Card.Content>
-    <Button onClick={null}>Add to Trip</Button>
+    <Button onClick={()=> addEventToTrip(restaurant)}>Add to Trip</Button>
   </Card>
   )
 }
