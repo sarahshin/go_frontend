@@ -7,11 +7,13 @@ import Login from './components/Login'
 import SignUp from './components/SignUp'
 import MainPage from "./containers/MainPage"
 import TripContainer from './containers/TripContainer'
+import Dashboard from './containers/Dashboard'
 
 class App extends Component {
 
   state={
     users: [],
+    currentUser: "",
     usertrip: "",
     firstname: "",
     lastname: "",
@@ -33,13 +35,14 @@ class App extends Component {
   }
 
   fetchMyUpcomingTrips = () => {
-    fetch("http://localhost:3000/api/v1/trips")
-    .then(res => res.json())
-    .then(trips => {
-      this.setState({
-        upcomingTrips: trips
-      })
-    })
+    // let thisUser = this.state.users.find(user => user.id === parseInt(localStorage.id))
+    // fetch("http://localhost:3000/api/v1/trips")
+    // .then(res => res.json())
+    // .then(trips => {
+    //   this.setState({
+    //     upcomingTrips: trips
+    //   })
+    // })
   }
 
   fetchUsers = () => {
@@ -80,7 +83,8 @@ class App extends Component {
         email: "",
         password: "",
         firstname: "",
-        lastname: ""
+        lastname: "",
+        users: [...this.state.users, user]
       })
     })
   }
@@ -111,7 +115,7 @@ class App extends Component {
   createTrip = (e) => {
     e.preventDefault()
     const data = {
-      triplocation: this.state.triplocation,
+      location: this.state.location,
       startdate: this.state.startdate,
       enddate: this.state.enddate,
     }
@@ -213,6 +217,7 @@ class App extends Component {
           <Menu.Item as={Link} to="/">Home</Menu.Item>
           <Menu.Item as={Link} to="/login">Login</Menu.Item>
           <Menu.Item as={Link} to="/signup">Sign Up</Menu.Item>
+          <Menu.Item onClick={()=> console.log("clicked")} as='a'>Dashboard</Menu.Item>
           <Menu.Item as={Link} to="/trip/new">Create New Trip</Menu.Item>
           <Menu.Item onClick={this.handleLogout} as='a'>Sign Out</Menu.Item>
         </Container>
@@ -237,6 +242,7 @@ class App extends Component {
             createAccount={this.createAccount}
           />}
         />
+        <Route path="/dashboard" component={Dashboard}/>
         <Route path="/trip/new"
           render={(props) => <TripContainer
             startdate={this.state.startdate}
