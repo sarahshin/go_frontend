@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Route, NavLink } from "react-router-dom";
+import { Route, Link } from "react-router-dom";
+import { Container, Menu, Image } from 'semantic-ui-react'
 import './App.css';
 
 import Login from './components/Login'
 import SignUp from './components/SignUp'
 import MainPage from "./containers/MainPage"
 import TripContainer from './containers/TripContainer'
-import SearchContainer from './containers/SearchContainer'
 
 class App extends Component {
 
@@ -103,6 +103,9 @@ class App extends Component {
   handleLogout = () => {
     localStorage.clear()
     //redirect to login page
+    this.setState({
+      loggedIn: false
+    })
   }
 
   createTrip = (e) => {
@@ -167,11 +170,19 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <NavLink to="/">Home</NavLink>
-        <NavLink to="/login">Login</NavLink>
-        <NavLink to="/signup">Sign-Up</NavLink>
-        <NavLink to="/trip/new">Create New Trip</NavLink>
-        <button onClick={this.handleLogout}>Logout</button>
+        <Menu fixed='top' inverted>
+        <Container>
+          <Menu.Item as='a' header>
+            <Image size='mini' src='/logo.png' style={{ marginRight: '1.5em' }} />
+            GoGoGo
+          </Menu.Item>
+          <Menu.Item as={Link} to="/">Home</Menu.Item>
+          <Menu.Item as={Link} to="/login">Login</Menu.Item>
+          <Menu.Item as={Link} to="/signup">Sign Up</Menu.Item>
+          <Menu.Item as={Link} to="/trip/new">Create New Trip</Menu.Item>
+          <Menu.Item onClick={this.handleLogout} as='a'>Sign Out</Menu.Item>
+        </Container>
+        </Menu>
 
         <Route path="/" exact component={MainPage} />
         <Route path="/login"

@@ -1,6 +1,5 @@
 import React from "react"
 import { Card, Image, Button } from "semantic-ui-react"
-// import { Card, Row, Col, CardTitle } from 'react-materialize';
 
 const SearchItem = (props) => {
 
@@ -23,12 +22,5 @@ const SearchItem = (props) => {
   </Card>
   )
 }
-// <Row>
-// <Col m={6} s={12}>
-// <Card header={<CardTitle />} actions={[<a />]}>
-// Food
-// </Card>
-// </Col>
-// </Row>
 
 export default SearchItem
