@@ -12,12 +12,12 @@ class App extends Component {
 
   state={
     users: [],
+    usertrip: "",
     firstname: "",
     lastname: "",
     password: "",
     email: "",
     loggedIn: false,
-    triplocation: "",
     startdate: "",
     enddate: "",
     formSubmitted: false,
@@ -137,7 +137,11 @@ class App extends Component {
         })
       })
       .then(r => r.json())
-      .then(console.log)
+      .then(usertrip => {
+        this.setState({
+          usertrip
+        }, () => console.log(this.state.usertrip))
+      })
     })
     this.setState({
       formSubmitted: true,
@@ -165,6 +169,36 @@ class App extends Component {
         returnedRestaurants: restaurants.businesses
       }, () => console.log(this.state.returnedRestaurants))
     })
+  }
+
+  addEventToTrip = (restaurant) => {
+    console.log("clicked", restaurant, this.state.usertrip.id)
+    const data = {
+      date: "",
+      time: "",
+      name: restaurant.name,
+      address: restaurant.location.display_address[0],
+      address1: restaurant.location.display_address[1],
+      address2: restaurant.location.display_address[2],
+      latitude: restaurant.coordinates.latitude,
+      longitude: restaurant.coordinates.longitude,
+      phone: restaurant.display_phone,
+      rating: restaurant.rating,
+      price: restaurant.price,
+      url: restaurant.url,
+      imgurl: restaurant.image_url,
+      user_trip_id: this.state.usertrip.id,
+    }
+    fetch("http://localhost:3000/api/v1/events", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(console.log)
   }
 
   render() {
@@ -205,7 +239,6 @@ class App extends Component {
         />
         <Route path="/trip/new"
           render={(props) => <TripContainer
-            triplocation={this.state.triplocation}
             startdate={this.state.startdate}
             enddate={this.state.enddate}
             formSubmitted={this.state.formSubmitted}
@@ -215,6 +248,8 @@ class App extends Component {
             searchTerm={this.state.searchTerm}
             location={this.state.location}
             handleSubmit={this.handleSubmit}
+            addEventToTrip={this.addEventToTrip}
+            usertrip={this.state.usertrip}
           />}
         />
       </div>
