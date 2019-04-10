@@ -29,6 +29,7 @@ class App extends Component {
     location: "",
     myTrips: [],
     returnedRestaurants:[],
+    justLoggedOut: false,
   }
 
   componentDidMount(){
@@ -101,25 +102,17 @@ class App extends Component {
     })
   }
 
-  handleLogin = (e) => {
-    e.preventDefault()
-    const user = this.state.users.find(user => user.email === this.state.email && user.password === this.state.password);
-    if (!!user) {
-      localStorage.setItem('id', user.id)
-      this.setState({
-        email: "",
-        password: "",
-        loggedIn: true,
-      })
-      this.fetchMyTrips()
-    } else {
-      return alert("Please double check your email or password.")
-    }
+  successfullyLoggedIn = (e) => {
+    this.setState({
+      email: "",
+      password: "",
+      loggedIn: true,
+      justLoggedOut: false,
+    })
   }
 
   handleLogout = () => {
     localStorage.clear()
-    //redirect to login page
     this.setState({
       users: [],
       usertrip: "",
@@ -266,7 +259,7 @@ class App extends Component {
           <Menu.Item as={Link} to="/signup">Sign Up</Menu.Item>
           <Menu.Item as={Link} to="/dashboard">Dashboard</Menu.Item>
           <Menu.Item as={Link} to="/trip/new">Create New Trip</Menu.Item>
-          <Menu.Item onClick={this.handleLogout} as='a'>Sign Out</Menu.Item>
+          <Menu.Item onClick={this.handleLogout} as={Link} to ="/login">Sign Out</Menu.Item>
         </Container>
         </Menu>
 
@@ -276,7 +269,10 @@ class App extends Component {
             email={this.state.email}
             password={this.state.password}
             handleChange={this.handleChange}
-            handleLogin={this.handleLogin}
+            users={this.state.users}
+            loggedIn={this.state.loggedIn}
+            successfullyLoggedIn={this.successfullyLoggedIn}
+            fetchMyTrips={this.fetchMyTrips}
           />}
         />
         <Route path="/signup"

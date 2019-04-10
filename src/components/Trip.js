@@ -5,6 +5,7 @@ import { Card, Header, Container, Button } from 'semantic-ui-react'
 
 class Trip extends React.Component {
 
+  //STATE & LIFECYCLE***********************************************************
   constructor(props){
     super(props)
     this.state = ({
@@ -13,10 +14,11 @@ class Trip extends React.Component {
   }
 
   componentDidMount(){
-    console.log(this.props.match.params.id)
+    console.log(this.props.match)
     this.fetchEvents()
   }
 
+  //FETCH***********************************************************************
   fetchEvents = () => {
     fetch("http://localhost:3000/api/v1/events")
     .then(res => res.json())
@@ -28,6 +30,7 @@ class Trip extends React.Component {
     })
   }
 
+  //HELPER FUNCTIONS************************************************************
   renderEvents = () => {
     return this.state.events.map(event => {
       return <Event key={event.id} event={event} removeEvent={this.props.removeEvent}/>
@@ -39,16 +42,21 @@ class Trip extends React.Component {
     this.props.handleDoneBtnClick()
   }
 
+  //RENDER**********************************************************************
   render() {
     return (
       <div className="">
-        <Header as="h1">Your Selected Points of Interest</Header>
         <Container text style={{ marginTop: '5em' }}>
+          <Header as="h1">Points of Interest</Header>
+        </Container>
+        <Container text style={{ marginTop: '3em' }}>
           <Card.Group>
             {this.renderEvents()}
           </Card.Group>
         </Container>
-        <Button onClick={this.handleFinish}>Done</Button>
+        <Container text style={{ marginTop: '3em' }}>
+          <Button onClick={this.handleFinish}>Done</Button>
+        </Container>
       </div>
     )
   }

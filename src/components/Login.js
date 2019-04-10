@@ -1,10 +1,37 @@
 import React from "react";
+import { Redirect } from "react-router-dom";
+
 import { Form, Button, Header, Container } from 'semantic-ui-react'
 
 
 class Login extends React.Component {
 
+  constructor(props){
+    super(props)
+    this.state = {
+      toHome: false,
+    }
+  }
+
+  handleLogin = (e) => {
+    e.preventDefault()
+    const user = this.props.users.find(user => user.email === this.props.email && user.password === this.props.password)
+    if (!!user) {
+      localStorage.setItem('id', user.id)
+      this.props.successfullyLoggedIn()
+      this.props.fetchMyTrips()
+      this.setState({
+        toHome: !this.state.toHome,
+      })
+    } else {
+      return alert("Please double check your email or password.")
+    }
+  }
+
   render() {
+    if(this.state.toHome){
+      return <Redirect to="/"/>
+    }
     return (
       <Container text style={{ marginTop: '7em' }}>
         <Form>
@@ -28,7 +55,7 @@ class Login extends React.Component {
               placeholder='Password'
             />
           </Form.Field>
-          <Button type='submit' onClick={this.props.handleLogin}>Log In</Button>
+          <Button type='submit' onClick={this.handleLogin}>Log In</Button>
         </Form>
       </Container>
     )
