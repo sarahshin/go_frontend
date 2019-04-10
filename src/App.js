@@ -25,24 +25,29 @@ class App extends Component {
     formSubmitted: false,
     searchTerm: "",
     location: "",
-    upcomingTrips: [],
+    myTrips: [],
     returnedRestaurants:[],
   }
 
   componentDidMount(){
     this.fetchUsers()
-    console.log("users", this.state.users)
+    this.fetchMyTrips()
   }
 
-  fetchMyUpcomingTrips = () => {
-    // let thisUser = this.state.users.find(user => user.id === parseInt(localStorage.id))
-    // fetch("http://localhost:3000/api/v1/trips")
-    // .then(res => res.json())
-    // .then(trips => {
-    //   this.setState({
-    //     upcomingTrips: trips
-    //   })
-    // })
+  fetchMyTrips = () => {
+    fetch("http://localhost:3000/api/v1/trips")
+    .then(res => res.json())
+    .then(trips => {
+      let allUserTrips = trips.map( trip => trip.user_trips)
+      // console.log(allUserTrips)
+      let myUserTrips = allUserTrips.filter( userTrip => userTrip[0].user_id === parseInt(localStorage.id))
+      // console.log(myUserTrips)
+      let myTrips = myUserTrips.map( myUserTrip => myUserTrip[0].trip)
+      // console.log(myTrips)
+      this.setState({
+        myTrips
+      }, ()=> console.log(this.state.myTrips))
+    })
   }
 
   fetchUsers = () => {
@@ -129,6 +134,9 @@ class App extends Component {
     })
     .then(r => r.json())
     .then(trip => {
+      this.setState({
+        myTrips: [...this.state.myTrips,trip]
+      })
       fetch('http://localhost:3000/api/v1/user_trips', {
         method: 'POST',
         headers: {
@@ -217,7 +225,7 @@ class App extends Component {
           <Menu.Item as={Link} to="/">Home</Menu.Item>
           <Menu.Item as={Link} to="/login">Login</Menu.Item>
           <Menu.Item as={Link} to="/signup">Sign Up</Menu.Item>
-          <Menu.Item onClick={()=> console.log("clicked")} as='a'>Dashboard</Menu.Item>
+          <Menu.Item as={Link} to="/dashboard">Dashboard</Menu.Item>
           <Menu.Item as={Link} to="/trip/new">Create New Trip</Menu.Item>
           <Menu.Item onClick={this.handleLogout} as='a'>Sign Out</Menu.Item>
         </Container>
@@ -242,7 +250,11 @@ class App extends Component {
             createAccount={this.createAccount}
           />}
         />
-        <Route path="/dashboard" component={Dashboard}/>
+        <Route path="/dashboard"
+          render={(props) => <Dashboard
+            myTrips={this.state.myTrips}
+          />}
+        />
         <Route path="/trip/new"
           render={(props) => <TripContainer
             startdate={this.state.startdate}

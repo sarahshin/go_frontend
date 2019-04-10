@@ -1,6 +1,6 @@
 import React from "react";
 import Event from './Event'
-import { Card } from 'semantic-ui-react'
+import { Card, Header, Container } from 'semantic-ui-react'
 
 
 class Trip extends React.Component {
@@ -36,9 +36,12 @@ class Trip extends React.Component {
   render() {
     return (
       <div className="">
-        <Card.Group>
-          {this.renderEvents()}
-        </Card.Group>
+        <Header as="h1">Your Selected Points of Interest</Header>
+        <Container text style={{ marginTop: '5em' }}>
+          <Card.Group>
+            {this.renderEvents()}
+          </Card.Group>
+        </Container>
       </div>
     )
   }
