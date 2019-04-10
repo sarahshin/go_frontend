@@ -1,14 +1,22 @@
 import React from "react"
-// import Trip from "./Trip"
-import { Card } from "semantic-ui-react"
+import HighLevelTrip from "./HighLevelTrip"
+import { Card, Container } from "semantic-ui-react"
 
-const TripList = (props) => {
+const TripList = ({ myTrips }) => {
+
+  const renderTrips = () => {
+    return myTrips.map(trip => {
+      return <HighLevelTrip key={trip.id} trip={trip} />
+    })
+  }
 
   return (
   <div className="">
-    <Card.Group>
-      Hi
-    </Card.Group>
+    <Container text style={{ marginTop: '7em' }}>
+      <Card.Group>
+        {renderTrips()}
+      </Card.Group>
+    </Container>
   </div>
   )
 }

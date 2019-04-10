@@ -7,9 +7,14 @@ const Event = ({ event }) => {
   <div className="">
     <Card>
       <Card.Content>
-        <h4>{event.name}</h4>
-        <h5>date: {event.date}</h5>
-        <h5>time: {event.time}</h5>
+        <Card.Header>{event.name}</Card.Header>
+        <Card.Meta>
+          <span>{event.phone}</span>
+        </Card.Meta>
+        <Card.Description>{event.address}</Card.Description>
+        <Card.Description>{event.address1}</Card.Description>
+        <Card.Description>{event.address2}</Card.Description>
+        <a href={event.url}>view on yelp</a>
       </Card.Content>
     </Card>
   </div>
