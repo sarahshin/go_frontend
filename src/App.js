@@ -5,16 +5,18 @@ import './App.css';
 
 import Login from './components/Login'
 import SignUp from './components/SignUp'
+import Trip from './components/Trip'
 import MainPage from "./containers/MainPage"
 import TripContainer from './containers/TripContainer'
 import Dashboard from './containers/Dashboard'
 
 class App extends Component {
 
+//LIFECYCLE & STATE*************************************************************
   state={
     users: [],
-    currentUser: "",
     usertrip: "",
+    trip:"",
     firstname: "",
     lastname: "",
     password: "",
@@ -34,6 +36,7 @@ class App extends Component {
     this.fetchMyTrips()
   }
 
+  //FETCH***********************************************************************
   fetchMyTrips = () => {
     fetch("http://localhost:3000/api/v1/trips")
     .then(res => res.json())
@@ -60,11 +63,15 @@ class App extends Component {
     })
   }
 
+  //HELPER FUNCTIONS************************************************************
+
+  //controlled form helper******************************************************
   handleChange = (e) => {
     // debugger
     this.setState({ [e.target.name]: e.target.value })
   }
 
+  //login logout signup helpers*************************************************
   createAccount = (e) => {
     e.preventDefault()
     const data = {
@@ -104,6 +111,7 @@ class App extends Component {
         password: "",
         loggedIn: true,
       })
+      this.fetchMyTrips()
     } else {
       return alert("Please double check your email or password.")
     }
@@ -113,7 +121,30 @@ class App extends Component {
     localStorage.clear()
     //redirect to login page
     this.setState({
-      loggedIn: false
+      users: [],
+      usertrip: "",
+      firstname: "",
+      lastname: "",
+      password: "",
+      email: "",
+      loggedIn: false,
+      startdate: "",
+      enddate: "",
+      formSubmitted: false,
+      searchTerm: "",
+      location: "",
+      myTrips: [],
+      returnedRestaurants:[],
+    })
+  }
+
+  //new trip helpers************************************************************
+  renderNewTripForm = () => {
+    this.setState({
+      formSubmitted: !this.state.formSubmitted,
+      location: "",
+      startdate: "",
+      enddate:"",
     })
   }
 
@@ -156,10 +187,11 @@ class App extends Component {
       })
     })
     this.setState({
-      formSubmitted: true,
+      formSubmitted: !this.state.formSubmitted,
     })
   }
 
+  //search helpers**************************************************************
   handleSubmit = (e) => {
     e.preventDefault()
     this.handleRestaurantSearch(this.state.searchTerm, this.state.location)
@@ -178,9 +210,15 @@ class App extends Component {
     .then(res => res.json())
     .then(restaurants => {
       this.setState({
-        returnedRestaurants: restaurants.businesses
+        returnedRestaurants: restaurants.businesses,
+        searchTerm:""
       }, () => console.log(this.state.returnedRestaurants))
     })
+  }
+
+  //event helpers***************************************************************
+  removeEvent = () => {
+    console.log("remove me")
   }
 
   addEventToTrip = (restaurant) => {
@@ -213,6 +251,7 @@ class App extends Component {
     .then(console.log)
   }
 
+  //RENDER**********************************************************************
   render() {
     return (
       <div className="App">
@@ -255,6 +294,7 @@ class App extends Component {
             myTrips={this.state.myTrips}
           />}
         />
+        <Route path="/trips/:id" component={Trip} />
         <Route path="/trip/new"
           render={(props) => <TripContainer
             startdate={this.state.startdate}
@@ -268,6 +308,8 @@ class App extends Component {
             handleSubmit={this.handleSubmit}
             addEventToTrip={this.addEventToTrip}
             usertrip={this.state.usertrip}
+            removeEvent={this.removeEvent}
+            renderNewTripForm={this.renderNewTripForm}
           />}
         />
       </div>

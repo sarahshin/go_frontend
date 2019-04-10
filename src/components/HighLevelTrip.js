@@ -1,7 +1,9 @@
 import React from "react"
+import { NavLink } from "react-router-dom";
 import { Card, Button } from "semantic-ui-react"
 
 const HighLevelTrip = ({ trip }) => {
+
   return (
   <div className="">
     <Card>
@@ -12,7 +14,8 @@ const HighLevelTrip = ({ trip }) => {
         </Card.Meta>
       </Card.Content>
       <Card.Content extra>
-        <Button onClick={()=> console.log("clicked me")}>View Details</Button>
+        <Button as={NavLink} to={"/trips/" + trip.id}>View Details</Button>
+        <Button onClick={()=> console.log(trip)}>Delete</Button>
       </Card.Content>
     </Card>
   </div>

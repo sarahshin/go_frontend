@@ -17,11 +17,13 @@ const SearchItem = ({ restaurant, addEventToTrip, usertrip }) => {
     <Card style={{ marginLeft: '2em'}}>
       <Card.Content>
         <Image src={restaurant.image_url} alt="image" style={{width:'300px'}}/>
-        <h4>{restaurant.name}</h4>
-        <h5>{restaurant.price}</h5>
-        <h5>{restaurant.rating}</h5>
-        {displayAddress()}
-        <a href={restaurant.url}>view on yelp</a>
+        <Card.Header>{restaurant.name}</Card.Header>
+        <Card.Meta>
+          <span>{restaurant.price}</span>
+          <span>{restaurant.rating}</span>
+        </Card.Meta>
+        <Card.Description>{displayAddress()}</Card.Description>
+        <Card.Description><a href={restaurant.url}>view on yelp</a></Card.Description>
       </Card.Content>
       <Button onClick={()=> addEventToTrip(restaurant)}>Add to Trip</Button>
     </Card>
