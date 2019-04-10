@@ -56,7 +56,12 @@ class SearchContainer extends React.Component {
           </Container>
           :
           <Container text style={{ marginTop: '7em' }}>
-            <Trip usertrip={this.props.usertrip}/>
+            <Trip
+              usertrip={this.props.usertrip}
+              removeEvent={this.props.removeEvent}
+              handleDoneBtnClick={this.handleDoneBtnClick}
+              renderNewTripForm={this.props.renderNewTripForm}
+            />
           </Container>
         }
         </React.Fragment>

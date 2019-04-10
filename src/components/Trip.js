@@ -1,6 +1,6 @@
 import React from "react";
 import Event from './Event'
-import { Card, Header, Container } from 'semantic-ui-react'
+import { Card, Header, Container, Button } from 'semantic-ui-react'
 
 
 class Trip extends React.Component {
@@ -29,8 +29,13 @@ class Trip extends React.Component {
 
   renderEvents = () => {
     return this.state.events.map(event => {
-      return <Event key={event.id} event={event}/>
+      return <Event key={event.id} event={event} removeEvent={this.props.removeEvent}/>
     })
+  }
+
+  handleFinish = () => {
+    this.props.renderNewTripForm()
+    this.props.handleDoneBtnClick()
   }
 
   render() {
@@ -42,6 +47,7 @@ class Trip extends React.Component {
             {this.renderEvents()}
           </Card.Group>
         </Container>
+        <Button onClick={this.handleFinish}>Done</Button>
       </div>
     )
   }

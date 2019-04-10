@@ -156,13 +156,26 @@ class App extends Component {
       })
     })
     this.setState({
-      formSubmitted: true,
+      formSubmitted: !this.state.formSubmitted,
+    })
+  }
+
+  renderNewTripForm = () => {
+    this.setState({
+      formSubmitted: !this.state.formSubmitted,
+      location: "",
+      startdate: "",
+      enddate:"",
     })
   }
 
   handleSubmit = (e) => {
     e.preventDefault()
     this.handleRestaurantSearch(this.state.searchTerm, this.state.location)
+  }
+
+  removeEvent = () => {
+    console.log("remove me")
   }
 
   handleRestaurantSearch = (searchTerm, location) => {
@@ -178,7 +191,8 @@ class App extends Component {
     .then(res => res.json())
     .then(restaurants => {
       this.setState({
-        returnedRestaurants: restaurants.businesses
+        returnedRestaurants: restaurants.businesses,
+        searchTerm:""
       }, () => console.log(this.state.returnedRestaurants))
     })
   }
@@ -268,6 +282,8 @@ class App extends Component {
             handleSubmit={this.handleSubmit}
             addEventToTrip={this.addEventToTrip}
             usertrip={this.state.usertrip}
+            removeEvent={this.removeEvent}
+            renderNewTripForm={this.renderNewTripForm}
           />}
         />
       </div>

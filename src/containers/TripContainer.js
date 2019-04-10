@@ -24,6 +24,8 @@ const TripContainer = (props) => {
         handleSubmit={props.handleSubmit}
         addEventToTrip={props.addEventToTrip}
         usertrip={props.usertrip}
+        removeEvent={props.removeEvent}
+        renderNewTripForm={props.renderNewTripForm}
       />
     }
 
