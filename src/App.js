@@ -131,7 +131,7 @@ class App extends Component {
     })
   }
 
-  //new trip helpers************************************************************
+  //trip helpers************************************************************
   renderNewTripForm = () => {
     this.setState({
       formSubmitted: !this.state.formSubmitted,
@@ -209,11 +209,17 @@ class App extends Component {
     })
   }
 
-  //event helpers***************************************************************
-  removeEvent = () => {
-    console.log("remove me")
+  deleteThisTrip = (tripToDelete) => {
+    console.log("delete this trip", tripToDelete)
+    let updatedTrips = this.state.myTrips.filter(trip => trip !== tripToDelete)
+    this.setState({
+      myTrips: updatedTrips
+    })
+    fetch(`http://localhost:3000/api/v1/trips/${tripToDelete.id}`, {
+      method: "DELETE"
+    })
   }
-
+  //event helpers***************************************************************
   addEventToTrip = (restaurant) => {
     console.log("clicked", restaurant, this.state.usertrip.id)
     const data = {
@@ -288,9 +294,14 @@ class App extends Component {
         <Route path="/dashboard"
           render={(props) => <Dashboard
             myTrips={this.state.myTrips}
+            deleteThisTrip={this.deleteThisTrip}
           />}
         />
-        <Route path="/trips/:id" component={Trip} />
+        <Route path="/trips/:id"
+          render={(props) => <Trip
+            {...props}
+          />}
+        />
         <Route path="/trip/new"
           render={(props) => <TripContainer
             startdate={this.state.startdate}
@@ -304,7 +315,6 @@ class App extends Component {
             handleSubmit={this.handleSubmit}
             addEventToTrip={this.addEventToTrip}
             usertrip={this.state.usertrip}
-            removeEvent={this.removeEvent}
             renderNewTripForm={this.renderNewTripForm}
           />}
         />

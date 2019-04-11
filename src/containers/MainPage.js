@@ -6,11 +6,12 @@ const MainPage = () => {
   return (
   <div className="">
     <Container text style={{ marginTop: '7em' }}>
-      <Header as='h1'>GoGoGo</Header>
+      <Header as='h1' inverted color="red">GoGoGo</Header>
       <p>A travel planning app.</p>
     </Container>
   </div>
   )
 }
+
 
 export default MainPage
