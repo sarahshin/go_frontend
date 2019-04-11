@@ -7,7 +7,7 @@ const NewTripForm = (props) => {
   <div className="newtrip">
     <Container text style={{ marginTop: '7em' }}>
       <Form>
-        <Header as="h3">Start Planning New Trip</Header>
+        <Header as="h2">Start Planning A New Trip</Header>
         <Form.Field>
           <label>Location</label>
           <input onChange={(e) => props.handleChange(e)} name="location" value={props.location} placeholder='City' />

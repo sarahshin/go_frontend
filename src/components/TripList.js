@@ -12,8 +12,8 @@ const TripList = ({ myTrips, deleteThisTrip }) => {
 
   return (
   <div className="">
-    <Container text style={{ marginTop: '7em' }}>
-      <Card.Group itemsPerRow={5} >
+    <Container style={{ marginTop: '7em' }}>
+      <Card.Group>
         {renderTrips()}
       </Card.Group>
     </Container>
