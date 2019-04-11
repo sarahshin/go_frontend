@@ -1,6 +1,7 @@
 import React from "react";
 import Event from './Event'
-import { Card, Header, Container, Button } from 'semantic-ui-react'
+import { Link } from "react-router-dom";
+import { Item, Header, Container, Button } from 'semantic-ui-react'
 
 
 class Trip extends React.Component {
@@ -30,32 +31,38 @@ class Trip extends React.Component {
     })
   }
 
-  //HELPER FUNCTIONS************************************************************
-  renderEvents = () => {
-    return this.state.events.map(event => {
-      return <Event key={event.id} event={event} removeEvent={this.props.removeEvent}/>
+  removeEvent = (tripEvent) => {
+    console.log("remove me", tripEvent)
+    let updatedEvents = this.state.events.filter(event => event !== tripEvent)
+    this.setState({
+      events: updatedEvents
+    })
+    fetch(`http://localhost:3000/api/v1/events/${tripEvent.id}`, {
+      method: "DELETE"
     })
   }
 
-  handleFinish = () => {
-    this.props.renderNewTripForm()
-    this.props.handleDoneBtnClick()
+  //HELPER FUNCTIONS************************************************************
+  renderEvents = () => {
+    return this.state.events.map(event => {
+      return <Event key={event.id} tripEvent={event} removeEvent={this.removeEvent}/>
+    })
   }
 
   //RENDER**********************************************************************
   render() {
     return (
       <div className="">
-        <Container text style={{ marginTop: '5em' }}>
+        <Container textAlign='center' style={{ marginTop: '5em' }}>
           <Header as="h1">Points of Interest</Header>
         </Container>
-        <Container text style={{ marginTop: '3em' }}>
-          <Card.Group>
+        <Container style={{ marginTop: '3em' }}>
+          <Item.Group divided>
             {this.renderEvents()}
-          </Card.Group>
+          </Item.Group>
         </Container>
         <Container text style={{ marginTop: '3em' }}>
-          <Button onClick={this.handleFinish}>Done</Button>
+          <Button as={Link} to={"/dashboard"}>Back</Button>
         </Container>
       </div>
     )

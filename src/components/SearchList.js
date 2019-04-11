@@ -11,7 +11,7 @@ const SearchList = (props) => {
   }
   return (
   <div className="">
-    <Container text style={{ marginTop: '7em' }}>
+    <Container style={{ marginTop: '7em' }}>
       <Card.Group>
         {renderRestaurantSearchReturn()}
       </Card.Group>
