@@ -4,16 +4,16 @@ import { Card, Container } from 'semantic-ui-react'
 
 const SearchList = (props) => {
 
-  const renderRestaurantSearchReturn = () => {
-    return props.returnedRestaurants.map(restaurant => {
-      return <SearchItem key={restaurant.id} restaurant={restaurant} addEventToTrip={props.addEventToTrip} usertrip={props.usertrip}/>
+  const renderSearchReturn = () => {
+    return props.returnedBusinesses.map(business => {
+      return <SearchItem key={business.id} business={business} addEventToTrip={props.addEventToTrip} usertrip={props.usertrip}/>
     })
   }
   return (
   <div className="">
     <Container style={{ marginTop: '7em' }}>
       <Card.Group>
-        {renderRestaurantSearchReturn()}
+        {renderSearchReturn()}
       </Card.Group>
     </Container>
   </div>

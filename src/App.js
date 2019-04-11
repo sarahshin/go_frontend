@@ -16,7 +16,6 @@ class App extends Component {
   state={
     users: [],
     usertrip: "",
-    trip:"",
     firstname: "",
     lastname: "",
     password: "",
@@ -26,9 +25,10 @@ class App extends Component {
     enddate: "",
     formSubmitted: false,
     searchTerm: "",
+    searchCategory: "",
     location: "",
     myTrips: [],
-    returnedRestaurants:[],
+    returnedBusinesses:[],
     justLoggedOut: false,
   }
 
@@ -70,6 +70,12 @@ class App extends Component {
   handleChange = (e) => {
     // debugger
     this.setState({ [e.target.name]: e.target.value })
+  }
+
+  setCategoryState = (cat) => {
+    this.setState({
+      searchCategory: cat
+    })
   }
 
   //login logout signup helpers*************************************************
@@ -127,7 +133,7 @@ class App extends Component {
       searchTerm: "",
       location: "",
       myTrips: [],
-      returnedRestaurants:[],
+      returnedBusinesses:[],
     })
   }
 
@@ -141,10 +147,18 @@ class App extends Component {
     })
   }
 
+  titleCase = (str) => {
+   var splitStr = str.toLowerCase().split(' ');
+   for (var i = 0; i < splitStr.length; i++) {
+       splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
+   }
+   return splitStr.join(' ');
+  }
+
   createTrip = (e) => {
     e.preventDefault()
     const data = {
-      location: this.state.location,
+      location: this.titleCase(this.state.location),
       startdate: this.state.startdate,
       enddate: this.state.enddate,
     }
@@ -187,12 +201,36 @@ class App extends Component {
   //search helpers**************************************************************
   handleSubmit = (e) => {
     e.preventDefault()
-    this.handleRestaurantSearch(this.state.searchTerm, this.state.location)
+    // debugger
+    console.log(this.props.searchCategory)
+    switch(this.state.searchCategory){
+      case "Restaurants":
+        this.handleCategorySearch(this.state.searchTerm, this.state.location, "restaurant_search")
+        break;
+      case "Arts":
+        this.handleCategorySearch(this.state.searchTerm, this.state.location, "arts_search")
+        break;
+      case "Hotels":
+        this.handleCategorySearch(this.state.searchTerm, this.state.location, "hotel_search")
+        break;
+      case "Nightlife":
+        this.handleCategorySearch(this.state.searchTerm, this.state.location, "nightlife_search")
+        break;
+      case "Souvenirs":
+        this.handleCategorySearch(this.state.searchTerm, this.state.location, "souvenir_search")
+        break;
+      case "Tours":
+        this.handleCategorySearch(this.state.searchTerm, this.state.location, "tour_search")
+        break;
+      default:
+        console.log("How did you even hit this point?")
+        break;
+    }
   }
 
-  handleRestaurantSearch = (searchTerm, location) => {
+  handleCategorySearch = (searchTerm, location, cat) => {
     const data = {searchTerm: searchTerm, location: location}
-    fetch("http://localhost:3000/api/v1/restaurant_search", {
+    fetch("http://localhost:3000/api/v1/" + cat, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -201,11 +239,11 @@ class App extends Component {
       body: JSON.stringify(data)
     })
     .then(res => res.json())
-    .then(restaurants => {
+    .then(businesses => {
       this.setState({
-        returnedRestaurants: restaurants.businesses,
+        returnedBusinesses: businesses.businesses,
         searchTerm:""
-      }, () => console.log(this.state.returnedRestaurants))
+      }, () => console.log(this.state.returnedBusinesses))
     })
   }
 
@@ -220,22 +258,22 @@ class App extends Component {
     })
   }
   //event helpers***************************************************************
-  addEventToTrip = (restaurant) => {
-    console.log("clicked", restaurant, this.state.usertrip.id)
+  addEventToTrip = (business) => {
+    console.log("clicked", business, this.state.usertrip.id)
     const data = {
       date: "",
       time: "",
-      name: restaurant.name,
-      address: restaurant.location.display_address[0],
-      address1: restaurant.location.display_address[1],
-      address2: restaurant.location.display_address[2],
-      latitude: restaurant.coordinates.latitude,
-      longitude: restaurant.coordinates.longitude,
-      phone: restaurant.display_phone,
-      rating: restaurant.rating,
-      price: restaurant.price,
-      url: restaurant.url,
-      imgurl: restaurant.image_url,
+      name: business.name,
+      address: business.location.display_address[0],
+      address1: business.location.display_address[1],
+      address2: business.location.display_address[2],
+      latitude: business.coordinates.latitude,
+      longitude: business.coordinates.longitude,
+      phone: business.display_phone,
+      rating: business.rating,
+      price: business.price,
+      url: business.url,
+      imgurl: business.image_url,
       user_trip_id: this.state.usertrip.id,
     }
     fetch("http://localhost:3000/api/v1/events", {
@@ -309,9 +347,11 @@ class App extends Component {
             formSubmitted={this.state.formSubmitted}
             handleChange={this.handleChange}
             createTrip={this.createTrip}
-            returnedRestaurants={this.state.returnedRestaurants}
+            returnedBusinesses={this.state.returnedBusinesses}
             searchTerm={this.state.searchTerm}
+            searchCategory={this.state.searchCategory}
             location={this.state.location}
+            setCategoryState={this.setCategoryState}
             handleSubmit={this.handleSubmit}
             addEventToTrip={this.addEventToTrip}
             usertrip={this.state.usertrip}

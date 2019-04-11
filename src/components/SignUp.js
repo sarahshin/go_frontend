@@ -8,7 +8,7 @@ class SignUp extends React.Component {
     <div className="signup">
       <Container text style={{ marginTop: '7em' }}>
         <Form>
-          <Header as="h3">Registration Form</Header>
+          <Header as="h2">Create an Account</Header>
           <Form.Field>
             <label>First Name</label>
             <input

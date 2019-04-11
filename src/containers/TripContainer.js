@@ -17,9 +17,11 @@ const TripContainer = (props) => {
       />
       :
       <SearchContainer
-        returnedRestaurants={props.returnedRestaurants}
+        returnedBusinesses={props.returnedBusinesses}
         searchTerm={props.searchTerm}
+        searchCategory={props.searchCategory}
         location={props.location}
+        setCategoryState={props.setCategoryState}
         handleChange={props.handleChange}
         handleSubmit={props.handleSubmit}
         addEventToTrip={props.addEventToTrip}
