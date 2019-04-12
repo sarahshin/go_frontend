@@ -14,6 +14,7 @@ const TripContainer = (props) => {
         startdate={props.startdate}
         enddate={props.enddate}
         createTrip={props.createTrip}
+        usertrip={props.usertrip}
       />
       :
       <SearchContainer

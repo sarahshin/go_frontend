@@ -1,9 +1,29 @@
 import React from "react";
 import { Form, Button, Header, Container } from 'semantic-ui-react'
+import { Redirect } from "react-router-dom";
+
 
 class SignUp extends React.Component {
 
+  constructor(props){
+    super(props)
+    this.state = {
+      toHome: false,
+    }
+  }
+
+  handleSignUp = (e) => {
+    e.preventDefault()
+    this.setState({
+      toHome: !this.state.toHome
+    })
+    this.props.createAccount()
+  }
+
   render() {
+    if (this.state.toHome) {
+      return <Redirect to="/" />
+    }
     return (
     <div className="signup">
       <Container text style={{ marginTop: '7em' }}>
@@ -46,7 +66,7 @@ class SignUp extends React.Component {
               placeholder='Password'
             />
           </Form.Field>
-          <Button type='submit' onClick={this.props.createAccount}>Register</Button>
+          <Button type='submit' onClick={this.handleSignUp}>Register</Button>
         </Form>
       </Container>
     </div>

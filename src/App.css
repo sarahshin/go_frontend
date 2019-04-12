@@ -36,6 +36,10 @@
   height: 35%;
 }
 
+div.ui.overlay.right.very.wide.visible.sidebar {
+  background-color: whitesmoke;
+}
+
 /* .ui.card .content img, .ui.cards>.card .content img {
   height: 35%;
 } */

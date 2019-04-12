@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Link } from "react-router-dom";
-import { Container, Menu, Image } from 'semantic-ui-react'
+import { Container, Menu } from 'semantic-ui-react'
 import './App.css';
 
 import Login from './components/Login'
@@ -43,14 +43,9 @@ class App extends Component {
     .then(res => res.json())
     .then(trips => {
       let allUserTrips = trips.map( trip => trip.user_trips)
-      // console.log(allUserTrips)
       let myUserTrips = allUserTrips.filter( userTrip => userTrip[0].user_id === parseInt(localStorage.id))
-      // console.log(myUserTrips)
       let myTrips = myUserTrips.map( myUserTrip => myUserTrip[0].trip)
-      // console.log(myTrips)
-      this.setState({
-        myTrips
-      }, ()=> console.log(this.state.myTrips))
+      this.setState({ myTrips })
     })
   }
 
@@ -58,9 +53,7 @@ class App extends Component {
     fetch("http://localhost:3000/api/v1/users")
     .then(res => res.json())
     .then(users => {
-      this.setState({
-        users: users
-      }, () => console.log("fetched users", this.state.users))
+      this.setState({ users })
     })
   }
 
@@ -68,7 +61,6 @@ class App extends Component {
 
   //controlled form helper******************************************************
   handleChange = (e) => {
-    // debugger
     this.setState({ [e.target.name]: e.target.value })
   }
 
@@ -80,7 +72,6 @@ class App extends Component {
 
   //login logout signup helpers*************************************************
   createAccount = (e) => {
-    e.preventDefault()
     const data = {
       email: this.state.email,
       password: this.state.password,
@@ -188,9 +179,7 @@ class App extends Component {
       })
       .then(r => r.json())
       .then(usertrip => {
-        this.setState({
-          usertrip
-        }, () => console.log(this.state.usertrip))
+        this.setState({ usertrip })
       })
     })
     this.setState({
@@ -201,8 +190,6 @@ class App extends Component {
   //search helpers**************************************************************
   handleSubmit = (e) => {
     e.preventDefault()
-    // debugger
-    console.log(this.props.searchCategory)
     switch(this.state.searchCategory){
       case "Restaurants":
         this.handleCategorySearch(this.state.searchTerm, this.state.location, "restaurant_search")
@@ -257,9 +244,9 @@ class App extends Component {
       method: "DELETE"
     })
   }
+
   //event helpers***************************************************************
   addEventToTrip = (business) => {
-    console.log("clicked", business, this.state.usertrip.id)
     const data = {
       date: "",
       time: "",
@@ -275,6 +262,7 @@ class App extends Component {
       url: business.url,
       imgurl: business.image_url,
       user_trip_id: this.state.usertrip.id,
+      cat: this.state.searchCategory,
     }
     fetch("http://localhost:3000/api/v1/events", {
       method: "POST",
@@ -294,11 +282,7 @@ class App extends Component {
       <div className="App">
         <Menu fixed='top' inverted>
         <Container>
-          <Menu.Item as='a' header>
-            <Image size='mini' src='/logo.png' style={{ marginRight: '1.5em' }} />
-            GoGoGo
-          </Menu.Item>
-          <Menu.Item as={Link} to="/">Home</Menu.Item>
+          <Menu.Item as={Link} to="/">GoGoGo</Menu.Item>
           <Menu.Item as={Link} to="/login">Login</Menu.Item>
           <Menu.Item as={Link} to="/signup">Sign Up</Menu.Item>
           <Menu.Item as={Link} to="/dashboard">Dashboard</Menu.Item>
@@ -307,7 +291,7 @@ class App extends Component {
         </Container>
         </Menu>
 
-        <Route path="/" exact component={MainPage} />
+        <Route path="/" exact component={MainPage}/>
         <Route path="/login"
           render={(props) => <Login
             email={this.state.email}
