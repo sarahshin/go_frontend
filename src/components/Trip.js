@@ -1,5 +1,6 @@
 import React, {createRef} from "react";
 import Event from './Event'
+import SearchList from './SearchList'
 import { Link } from "react-router-dom";
 import { Item, Header, Container, Button, Sidebar, Segment, Divider, Icon, Form, Dropdown, Image } from 'semantic-ui-react'
 
@@ -44,11 +45,14 @@ class Trip extends React.Component {
     this.state = ({
       events: [],
       tripLocation: "",
+      thisUserTrip: "",
       searchEvents: false,
       renderEditForm: false,
       visible: false,
+      value: "",
     })
   }
+
 
   componentDidMount(){
     console.log(this.props.match)
@@ -63,7 +67,8 @@ class Trip extends React.Component {
       this.setState({
         events: myEvents,
         tripLocation: myEvents[0].user_trip.trip.location,
-      }, ()=> console.log(this.state.events))
+        thisUserTrip: myEvents[0].user_trip
+      }, ()=> this.props.setTripLocation(this.state.tripLocation, this.state.thisUserTrip))
     })
   }
 
@@ -85,11 +90,17 @@ class Trip extends React.Component {
     })
   }
 
-  searchForMoreEvents = () => {
+  handleDropDownChange = (e, { value }) => {
+    this.setState({ value })
+    this.props.setCategoryState(value)
+  }
+
+  searchForMoreEvents = (e) => {
     console.log("gimme gimme more gimme more gimme gimme more")
     this.setState({
       searchEvents: true,
     })
+    this.props.handleAdditionalSubmit(e)
   }
 
   addMoreEvents = () => {
@@ -100,11 +111,20 @@ class Trip extends React.Component {
     })
   }
 
-
+  doneAddingMoreEvents = () => {
+    console.log("All done here- moving along")
+    this.setState({
+      visible: false,
+      renderEditForm: false,
+      searchEvents: false,
+    })
+    this.fetchEvents()
+  }
 
   //RENDER**********************************************************************
 
   render() {
+    const { value } = this.state.value
     return (
       <div className="">
       <Sidebar.Pushable as={Segment}>
@@ -126,11 +146,19 @@ class Trip extends React.Component {
             <Form>
             <Form.Field>
               <label>Search Term:</label>
-              <input/>
+              <input
+                onChange={(e) => this.props.handleChange(e)}
+                name="searchTerm"
+                value={this.props.searchTerm}
+                placeholder='things to eat, places to go, things to see'
+              />
             </Form.Field>
             <Form.Field>
               <label>Search Category</label>
               <Dropdown
+                onChange={this.handleDropDownChange}
+                name="searchCategory"
+                value={value}
                 placeholder='category'
                 fluid
                 selection
@@ -146,21 +174,28 @@ class Trip extends React.Component {
                 placeholder={this.state.tripLocation}
               />
             </Form.Field>
-              <Button type='submit' onClick={()=> this.searchForMoreEvents()}>Search</Button>
+              <Button type='submit' onClick={(e)=> this.searchForMoreEvents(e)}>Search</Button>
+              <Button onClick={()=> this.doneAddingMoreEvents()}>Done</Button>
             </Form>
             { this.state.searchEvents ?
+              <React.Fragment>
               <Divider horizontal>
                 <Header as="h4">
                 Results
                 </Header>
               </Divider>
+              <SearchList
+                returnedBusinesses={this.props.returnedBusinesses}
+                addEventToTrip={this.props.addEventToTrip}
+              />
+              </React.Fragment>
             :
               null
             }
           </Container>
         </Sidebar>
 
-          <Sidebar.Pusher>
+          <Sidebar.Pusher dimmed={this.state.visible}>
             <Segment basic>
               <Container textAlign='center' style={{ marginTop: '5em' }}>
                 <Header as="h1">Points of Interest</Header>
