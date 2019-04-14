@@ -27,6 +27,7 @@ class App extends Component {
     searchTerm: "",
     searchCategory: "",
     location: "",
+    tripLocation: "",
     myTrips: [],
     returnedBusinesses:[],
     justLoggedOut: false,
@@ -210,7 +211,7 @@ class App extends Component {
         this.handleCategorySearch(this.state.searchTerm, this.state.location, "tour_search")
         break;
       default:
-        console.log("How did you even hit this point?")
+        console.log("How did you even hit this point?", this.state.tripLocation)
         break;
     }
   }
@@ -234,6 +235,40 @@ class App extends Component {
     })
   }
 
+  setTripLocation = (tripLocForAdditionalEvent, thisusertrip) => {
+    this.setState({
+      tripLocation: tripLocForAdditionalEvent,
+      usertrip: thisusertrip
+    }, ()=> console.log(this.state.tripLocation, this.state.searchCategory, this.state.usertrip))
+  }
+
+  handleAdditionalSubmit = (e) => {
+    e.preventDefault()
+    switch(this.state.searchCategory){
+      case "Restaurants":
+        this.handleCategorySearch(this.state.searchTerm, this.state.tripLocation, "restaurant_search")
+        break;
+      case "Arts":
+        this.handleCategorySearch(this.state.searchTerm, this.state.tripLocation, "arts_search")
+        break;
+      case "Hotels":
+        this.handleCategorySearch(this.state.searchTerm, this.state.tripLocation, "hotel_search")
+        break;
+      case "Nightlife":
+        this.handleCategorySearch(this.state.searchTerm, this.state.tripLocation, "nightlife_search")
+        break;
+      case "Souvenirs":
+        this.handleCategorySearch(this.state.searchTerm, this.state.tripLocation, "souvenir_search")
+        break;
+      case "Tours":
+        this.handleCategorySearch(this.state.searchTerm, this.state.tripLocation, "tour_search")
+        break;
+      default:
+        console.log("How did you even hit this point?")
+        break;
+    }
+  }
+
   deleteThisTrip = (tripToDelete) => {
     console.log("delete this trip", tripToDelete)
     let updatedTrips = this.state.myTrips.filter(trip => trip !== tripToDelete)
@@ -247,6 +282,7 @@ class App extends Component {
 
   //event helpers***************************************************************
   addEventToTrip = (business) => {
+    console.log("in addEventToTrip function in App", this.state.usertrip)
     const data = {
       date: "",
       time: "",
@@ -322,6 +358,16 @@ class App extends Component {
         <Route path="/trips/:id"
           render={(props) => <Trip
             {...props}
+            handleChange={this.handleChange}
+            handleSetCategory={this.handleSetCategory}
+            handleAdditionalSubmit={this.handleAdditionalSubmit}
+            handleCategorySearch={this.handleCategorySearch}
+            searchTerm={this.props.searchTerm}
+            searchCategory={this.props.searchCategory}
+            setTripLocation={this.setTripLocation}
+            setCategoryState={this.setCategoryState}
+            returnedBusinesses={this.state.returnedBusinesses}
+            addEventToTrip={this.addEventToTrip}
           />}
         />
         <Route path="/trip/new"
