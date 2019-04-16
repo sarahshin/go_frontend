@@ -1,8 +1,12 @@
 import React from "react"
+import CalendarDateTime from "./CalendarDateTime"
 import { Item, Button, Image } from 'semantic-ui-react'
 
 
-const Event = ({ tripEvent, removeEvent }) => {
+const Event = ({ tripEvent, removeEvent, handleEventTime, handleEventDate, myTripStartDate, myTripEndDate }) => {
+
+  // pass down function for updating event with time & date from App
+  // pass down handleChange & onSubmit to CalendarDateTime
 
   return (
     <Item>
@@ -16,10 +20,15 @@ const Event = ({ tripEvent, removeEvent }) => {
         <Item.Description>{tripEvent.address1}</Item.Description>
         <Item.Description>{tripEvent.address2}</Item.Description>
         <Item.Extra>
-          <Button onClick={()=>console.log("edit me- aka give me a time/date")}>Edit</Button>
           <Button onClick={()=> removeEvent(tripEvent)}>Remove</Button>
         </Item.Extra>
       </Item.Content>
+      <CalendarDateTime
+        handleEventDate={handleEventDate}
+        handleEventTime={handleEventTime}
+        myTripStartDate={myTripStartDate}
+        myTripEndDate={myTripEndDate}
+      />
     </Item>
 
   )

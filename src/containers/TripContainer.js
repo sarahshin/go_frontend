@@ -9,12 +9,14 @@ const TripContainer = (props) => {
   <div className="">
     { !props.formSubmitted ?
       <NewTripForm
-        handleChange={props.handleChange}
         location={props.location}
         startdate={props.startdate}
         enddate={props.enddate}
         createTrip={props.createTrip}
+        handleChange={props.handleChange}
         usertrip={props.usertrip}
+        handleStartDate={props.handleStartDate}
+        handleEndDate={props.handleEndDate}
       />
       :
       <SearchContainer
@@ -29,6 +31,7 @@ const TripContainer = (props) => {
         usertrip={props.usertrip}
         removeEvent={props.removeEvent}
         renderNewTripForm={props.renderNewTripForm}
+        clearReturn={props.clearReturn}
       />
     }
 

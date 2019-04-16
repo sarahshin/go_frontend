@@ -1,11 +1,12 @@
 import React from "react"
 import { Card, Image, Button } from "semantic-ui-react"
+import uuid from 'uuid'
 
 const SearchItem = ({ business, addEventToTrip, usertrip }) => {
 
   const displayAddress = () => {
     return business.location.display_address.map(line => {
-      return <p>{line}</p>
+      return <p key={uuid()}>{line}</p>
     })
   }
 

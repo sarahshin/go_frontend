@@ -40,6 +40,10 @@ div.ui.overlay.right.very.wide.visible.sidebar {
   background-color: whitesmoke;
 }
 
+.tripPage  {
+  height: 100%;
+}
+
 /* .ui.card .content img, .ui.cards>.card .content img {
   height: 35%;
 } */

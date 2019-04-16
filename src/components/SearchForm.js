@@ -44,6 +44,10 @@ class SearchForm extends React.Component {
     this.props.setCategoryState(value)
   }
 
+  handleDoneBtnClick = (e) => {
+
+  }
+
   render() {
     const { value } = this.state
 
@@ -84,7 +88,7 @@ class SearchForm extends React.Component {
           </Form.Field>
           <Button type='submit' onClick={this.props.handleSubmit}>Search</Button>
         </Form>
-        <Button style={{ marginTop: '1em' }} onClick={this.handleDoneBtnClick} as={Link} to={"/trips/"+this.props.usertrip.trip_id}>Done with Selections</Button>
+        <Button style={{ marginTop: '1em' }} onClick={this.props.clearReturn} as={Link} to={"/trips/"+this.props.usertrip.trip_id}>Done with Selections</Button>
         </Container>
       </div>
     )

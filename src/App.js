@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Link } from "react-router-dom";
 import { Container, Menu } from 'semantic-ui-react'
+import moment from 'moment'
 import './App.css';
 
 import Login from './components/Login'
@@ -21,32 +22,45 @@ class App extends Component {
     password: "",
     email: "",
     loggedIn: false,
-    startdate: "",
-    enddate: "",
+    startdate: new Date(),
+    enddate: new Date(),
     formSubmitted: false,
     searchTerm: "",
     searchCategory: "",
     location: "",
     tripLocation: "",
     myTrips: [],
+    upcomingTrips: [],
+    pastTrips: [],
     returnedBusinesses:[],
     justLoggedOut: false,
+    allUserTrips: [],
+    today: "",
   }
 
   componentDidMount(){
+    let thisDay = new Date()
+    this.setState({
+      today: moment(thisDay).format("MM/DD/YYYY")
+    },)
     this.fetchUsers()
     this.fetchMyTrips()
+    this.fetchUserTrips()
   }
 
   //FETCH***********************************************************************
   fetchMyTrips = () => {
-    fetch("http://localhost:3000/api/v1/trips")
+    return fetch("http://localhost:3000/api/v1/trips")
     .then(res => res.json())
     .then(trips => {
       let allUserTrips = trips.map( trip => trip.user_trips)
+      console.log(allUserTrips)
       let myUserTrips = allUserTrips.filter( userTrip => userTrip[0].user_id === parseInt(localStorage.id))
+      console.log(myUserTrips)
       let myTrips = myUserTrips.map( myUserTrip => myUserTrip[0].trip)
-      this.setState({ myTrips })
+      let upcomingTrips = myTrips.filter(trip => moment(trip.startdate).diff(this.state.today, 'days') > 0)
+      let pastTrips = myTrips.filter(trip => parseInt(moment(trip.startdate).diff(this.state.today, 'days')) <= 0)
+      this.setState({ myTrips, upcomingTrips, pastTrips })
     })
   }
 
@@ -58,11 +72,31 @@ class App extends Component {
     })
   }
 
+  fetchUserTrips = () => {
+    fetch("http://localhost:3000/api/v1/user_trips")
+    .then(res => res.json())
+    .then(user_trips => {
+      this.setState({
+        allUserTrips: user_trips
+      })
+    })
+  }
+
   //HELPER FUNCTIONS************************************************************
 
   //controlled form helper******************************************************
   handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value })
+  }
+
+  handleStartDate = (date) => {
+    // let startdate = moment(date).format('MM/DD/YYYY')
+    this.setState({ startdate: date })
+  }
+
+  handleEndDate = (date) => {
+    // let enddate = moment(date).format('MM/DD/YYYY')
+    this.setState({ enddate: date })
   }
 
   setCategoryState = (cat) => {
@@ -112,7 +146,6 @@ class App extends Component {
   handleLogout = () => {
     localStorage.clear()
     this.setState({
-      users: [],
       usertrip: "",
       firstname: "",
       lastname: "",
@@ -165,8 +198,19 @@ class App extends Component {
     .then(r => r.json())
     .then(trip => {
       this.setState({
-        myTrips: [...this.state.myTrips,trip]
+        myTrips: [...this.state.myTrips,trip],
+        returnedBusinesses: []
       })
+      if(trip.startdate > this.state.today){
+        this.setState({
+          upcomingTrips: [...this.state.upcomingTrips, trip],
+        })
+      } else {
+        this.setState({
+          pastTrips: [...this.state.pastTrips, trip],
+        })
+
+      }
       fetch('http://localhost:3000/api/v1/user_trips', {
         method: 'POST',
         headers: {
@@ -180,7 +224,10 @@ class App extends Component {
       })
       .then(r => r.json())
       .then(usertrip => {
-        this.setState({ usertrip })
+        this.setState({
+          usertrip: usertrip,
+          allUserTrips: [...this.state.allUserTrips, usertrip]
+        })
       })
     })
     this.setState({
@@ -235,11 +282,16 @@ class App extends Component {
     })
   }
 
-  setTripLocation = (tripLocForAdditionalEvent, thisusertrip) => {
+  setTripLocation = (tripLocForAdditionalEvent) => {
     this.setState({
       tripLocation: tripLocForAdditionalEvent,
-      usertrip: thisusertrip
-    }, ()=> console.log(this.state.tripLocation, this.state.searchCategory, this.state.usertrip))
+    })
+  }
+
+  setUserTrip = (thisUserTrip) => {
+    this.setState({
+      usertrip: thisUserTrip
+    })
   }
 
   handleAdditionalSubmit = (e) => {
@@ -272,11 +324,24 @@ class App extends Component {
   deleteThisTrip = (tripToDelete) => {
     console.log("delete this trip", tripToDelete)
     let updatedTrips = this.state.myTrips.filter(trip => trip !== tripToDelete)
+    console.log(updatedTrips)
     this.setState({
       myTrips: updatedTrips
-    })
+    }, () => this.forceUpdate())
     fetch(`http://localhost:3000/api/v1/trips/${tripToDelete.id}`, {
       method: "DELETE"
+    })
+  }
+
+  clearReturn = () => {
+    this.setState({
+      returnedBusinesses: []
+    })
+  }
+
+  clearLocation = () => {
+    this.setState({
+      location: "",
     })
   }
 
@@ -312,11 +377,16 @@ class App extends Component {
     .then(console.log)
   }
 
+  updateEvent = (event) => {
+    console.log(event)
+  }
+
   //RENDER**********************************************************************
   render() {
+    // console.log(this.state.myTrips)
     return (
       <div className="App">
-        <Menu fixed='top' inverted>
+        <Menu fixed='top'inverted size="large">
         <Container>
           <Menu.Item as={Link} to="/">GoGoGo</Menu.Item>
           <Menu.Item as={Link} to="/login">Login</Menu.Item>
@@ -352,7 +422,10 @@ class App extends Component {
         <Route path="/dashboard"
           render={(props) => <Dashboard
             myTrips={this.state.myTrips}
+            upcomingTrips={this.state.upcomingTrips}
+            pastTrips={this.state.pastTrips}
             deleteThisTrip={this.deleteThisTrip}
+            today={this.state.today}
           />}
         />
         <Route path="/trips/:id"
@@ -366,8 +439,11 @@ class App extends Component {
             searchCategory={this.props.searchCategory}
             setTripLocation={this.setTripLocation}
             setCategoryState={this.setCategoryState}
+            setUserTrip={this.setUserTrip}
             returnedBusinesses={this.state.returnedBusinesses}
             addEventToTrip={this.addEventToTrip}
+            myTrips={this.state.myTrips}
+            clearLocation={this.clearLocation}
           />}
         />
         <Route path="/trip/new"
@@ -386,6 +462,9 @@ class App extends Component {
             addEventToTrip={this.addEventToTrip}
             usertrip={this.state.usertrip}
             renderNewTripForm={this.renderNewTripForm}
+            handleStartDate={this.handleStartDate}
+            handleEndDate={this.handleEndDate}
+            clearReturn={this.clearReturn}
           />}
         />
       </div>

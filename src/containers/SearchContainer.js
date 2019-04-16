@@ -22,6 +22,7 @@ class SearchContainer extends React.Component {
             handleSubmit={this.props.handleSubmit}
             usertrip={this.props.usertrip}
             setCategoryState={this.props.setCategoryState}
+            clearReturn={this.props.clearReturn}
           />
           <SearchList
             returnedBusinesses={this.props.returnedBusinesses}

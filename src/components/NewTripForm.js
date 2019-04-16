@@ -1,4 +1,6 @@
 import React from "react"
+import CalendarRange from "./CalendarRange"
+
 import { Form, Button, Header, Container } from 'semantic-ui-react'
 
 const NewTripForm = (props) => {
@@ -13,12 +15,8 @@ const NewTripForm = (props) => {
           <input onChange={(e) => props.handleChange(e)} name="location" value={props.location} placeholder='City' />
         </Form.Field>
         <Form.Field>
-          <label>Start Date</label>
-          <input onChange={(e)=>props.handleChange(e)} name="startdate" value={props.startdate} placeholder='January 1, 2019' />
-        </Form.Field>
-        <Form.Field>
-          <label>End Date</label>
-          <input onChange={(e)=>props.handleChange(e)} name="enddate" value={props.enddate} placeholder='January 5, 2019' />
+          <label>Select Date Range</label>
+          <CalendarRange handleStartDate={props.handleStartDate} handleEndDate={props.handleEndDate} startdate={props.startdate} enddate={props.enddate}/>
         </Form.Field>
         <Button type='submit' onClick={props.createTrip}>Next</Button>
       </Form>
