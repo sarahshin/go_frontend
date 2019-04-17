@@ -15,19 +15,21 @@ const SearchItem = ({ business, addEventToTrip, usertrip }) => {
   // }
 
   return (
-    <Card style={{ width: 250 }}>
-      <Card.Content>
-      <Card.Header>{business.name}</Card.Header>
-        <Image src={business.image_url} alt="image"/>
-        <Card.Meta>
-          <span>{business.price}</span>
-          <span>{business.rating}</span>
-        </Card.Meta>
-        <Card.Description>{displayAddress()}</Card.Description>
-        <Card.Description><a href={business.url}>view on yelp</a></Card.Description>
-      </Card.Content>
-      <Button onClick={()=> addEventToTrip(business)}>Add to Trip</Button>
-    </Card>
+      <Card color="yellow">
+        <Card.Content>
+        <Card.Header>{business.name}</Card.Header>
+          <Image src={business.image_url} alt="image"/>
+          <Card.Meta>
+            <span>{business.price}</span>
+            <span>{business.rating}</span>
+          </Card.Meta>
+          <Card.Description>{displayAddress()}</Card.Description>
+          <Card.Description><a href={business.url}>view on yelp</a></Card.Description>
+        </Card.Content>
+        <Card.Content extra>
+          <Button color="yellow" onClick={()=> addEventToTrip(business)}>Add to Trip</Button>
+        </Card.Content>
+      </Card>
   )
 }
 

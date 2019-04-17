@@ -12,7 +12,8 @@ const Event = ({ tripEvent, removeEvent, handleEventTime, handleEventDate, myTri
     <Item>
       <Image src={tripEvent.imgurl} size="small" floated="left" verticalAlign='middle' />
       <Item.Content floated="left"verticalAlign="middle" >
-        <Item.Header as='a' to={tripEvent.url}>{tripEvent.name}</Item.Header>
+        <Item.Header><a href={tripEvent.url}>{tripEvent.name}</a></Item.Header>
+        <Item.Meta>{tripEvent.date} | {tripEvent.time}</Item.Meta>
         <Item.Meta>
           <span>{tripEvent.phone}</span>
         </Item.Meta>
@@ -20,7 +21,7 @@ const Event = ({ tripEvent, removeEvent, handleEventTime, handleEventDate, myTri
         <Item.Description>{tripEvent.address1}</Item.Description>
         <Item.Description>{tripEvent.address2}</Item.Description>
         <Item.Extra>
-          <Button onClick={()=> removeEvent(tripEvent)}>Remove</Button>
+          <Button basic color='red' onClick={()=> removeEvent(tripEvent)}>Remove</Button>
         </Item.Extra>
       </Item.Content>
       <CalendarDateTime

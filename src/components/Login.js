@@ -73,8 +73,7 @@ class Login extends React.Component {
             <Button color="yellow" fluid size = 'large' type='submit' onClick={this.handleLogin}>Log In</Button>
           </Form>
           <div style={{ marginTop: '1.5em'}}>
-            <Message>Don't have an account? <Link to="/signup">Sign Up</Link></Message>
-
+            <Message>Don't have an account? <Link to="/signup">Sign up here!</Link></Message>
           </div>
         </Grid.Column>
       </Grid>

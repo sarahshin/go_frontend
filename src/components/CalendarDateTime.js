@@ -4,30 +4,26 @@ import "react-datepicker/dist/react-datepicker.css";
 import { Form, Button } from 'semantic-ui-react'
 import moment from 'moment'
 
-
 class CalendarDateTime extends React.Component {
   //LIFECYCLE & STATE **********************************************************
-
   constructor(props) {
     super(props);
     this.state = {
-      eventDate: this.props.myTripStartDate,
+      eventDate: new Date(),
       eventTime: new Date(),
     };
     this.handleChange = this.handleChange.bind(this)
   }
 
   //HELPER FUNCTIONS ***********************************************************
-
   handleChange = (date) => {
+    console.log(date)
     this.setState({
       eventDate: date
     })
-    this.props.handleEventDate()
   }
 
   //RENDER *********************************************************************
-
   render() {
     return (
       <React.Fragment>
@@ -35,10 +31,10 @@ class CalendarDateTime extends React.Component {
           <Form.Field>
             <label>Date</label>
             <DatePicker
-              selected={new Date(moment(this.props.myTripStartDate).format("YYYY,MM,DD"))}
-              onChange={this.handleChange}
-              minDate={new Date(moment(this.props.myTripStartDate).format("YYYY,MM,DD"))}
-              maxDate={new Date(moment(this.props.myTripEndDate).format("YYYY,MM,DD"))}
+              selected={new Date(moment(this.props.myTripStartDate))}
+              onChange={()=>this.handleChange()}
+              minDate={new Date(moment(this.props.myTripStartDate))}
+              maxDate={new Date(moment(this.props.myTripEndDate))}
             />
           </Form.Field>
           <Form.Field>
@@ -53,7 +49,7 @@ class CalendarDateTime extends React.Component {
               timeCaption="Time"
             />
           </Form.Field>
-          <Button type="submit" onClick={()=> console.log("update with these new deets")}>Update</Button>
+          <Button color='google plus' type="submit" onClick={()=> console.log("update with these new deets")}>Update</Button>
         </Form>
       </React.Fragment>
     )

@@ -1,7 +1,7 @@
 import React from "react";
-import { Form, Button, Header, Container } from 'semantic-ui-react'
-import { Redirect } from "react-router-dom";
-
+import { Form, Button, Header, Grid, Message, Image } from 'semantic-ui-react'
+import { Redirect, Link } from "react-router-dom";
+import smallLogo from './smallgogologo.png'
 
 class SignUp extends React.Component {
 
@@ -26,49 +26,60 @@ class SignUp extends React.Component {
     }
     return (
     <div className="signup">
-      <Container text style={{ marginTop: '7em' }}>
-        <Form>
-          <Header as="h2">Create an Account</Header>
-          <Form.Field>
-            <label>First Name</label>
-            <input
-              onChange={(e) => this.props.handleChange(e)}
-              name="firstname"
-              value={this.props.firstname}
-              placeholder='First Name'
-            />
-          </Form.Field>
-          <Form.Field>
-            <label>Last Name</label>
-            <input
-              onChange={(e) => this.props.handleChange(e)}
-              name="lastname"
-              value={this.props.lastname}
-              placeholder='Last Name'
-            />
-          </Form.Field>
-          <Form.Field>
-            <label>E-mail</label>
-            <input
-              onChange={(e) => this.props.handleChange(e)}
-              name="email"
-              value={this.props.email}
-              placeholder='E-mail'
-            />
-          </Form.Field>
-          <Form.Field>
-            <label>Password</label>
-            <input
-              onChange={(e) => this.props.handleChange(e)}
-              type="password"
-              name="password"
-              value={this.props.password}
-              placeholder='Password'
-            />
-          </Form.Field>
-          <Button type='submit' onClick={this.handleSignUp}>Register</Button>
-        </Form>
-      </Container>
+      <Grid textAlign='center' style={{ height: '100%', marginTop: "7em" }} verticalAlign='middle'>
+        <Grid.Column style={{ maxWidth: 450 }}>
+          <Form size="large" style={{marginTop: "5em"}}>
+            <Image src={smallLogo} avatar/>
+            <Header as="h2" color="yellow">Create an Account</Header>
+            <Form.Field>
+              <Form.Input
+                fluid icon='user'
+                iconPosition='left'
+                placeholder='First Name'
+                onChange={(e) => this.props.handleChange(e)}
+                name="firstname"
+                value={this.props.firstname}
+              />
+            </Form.Field>
+            <Form.Field>
+              <Form.Input
+                fluid icon='user'
+                iconPosition='left'
+                placeholder='Last Name'
+                onChange={(e) => this.props.handleChange(e)}
+                name="lastname"
+                value={this.props.lastname}
+              />
+            </Form.Field>
+            <Form.Field>
+              <Form.Input
+                fluid icon='user'
+                iconPosition='left'
+                placeholder='E-mail Address'
+                onChange={(e) => this.props.handleChange(e)}
+                name="email"
+                value={this.props.email}
+              />
+            </Form.Field>
+            <Form.Field>
+              <Form.Input
+                fluid
+                icon='lock'
+                iconPosition='left'
+                placeholder='Password'
+                type='password'
+                onChange={(e) => this.props.handleChange(e)}
+                name="password"
+                value={this.props.password}
+              />
+            </Form.Field>
+            <Button color="yellow" fluid size = 'large' type='submit' onClick={this.handleSignUp}>Register</Button>
+          </Form>
+          <div style={{ marginTop: '1.5em'}}>
+            <Message>Already have an account? <Link to="/login">Log in!</Link></Message>
+          </div>
+        </Grid.Column>
+      </Grid>
     </div>
     )
   }

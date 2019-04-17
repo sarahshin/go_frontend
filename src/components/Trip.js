@@ -3,7 +3,7 @@ import Event from './Event'
 import SearchList from './SearchList'
 import EventsMap from './EventsMap'
 import { Link } from "react-router-dom";
-// import moment from 'moment'
+import moment from 'moment'
 import { Item, Header, Container, Button, Sidebar, Segment, Divider, Icon, Form, Dropdown, Grid } from 'semantic-ui-react'
 
 const catOptions = [
@@ -60,7 +60,6 @@ class Trip extends React.Component {
   }
 
   componentDidMount(){
-    console.log(this.props.match)
     this.fetchEvents()
     this.fetchUserTrips()
   }
@@ -79,7 +78,7 @@ class Trip extends React.Component {
         tripLocation: myTripLocation,
         myTripStartDate: myTripStartDate,
         myTripEndDate: myTripEndDate,
-      }, ()=> this.props.setTripLocation(this.state.tripLocation))
+      }, console.log(this.state.events))
     })
   }
 
@@ -106,7 +105,6 @@ class Trip extends React.Component {
   }
 
   handleEventDate = (date) => {
-    // let eventDate = moment(date).format('MM/DD/YYYY')
     this.setState({ eventDate: date })
   }
 
@@ -127,7 +125,7 @@ class Trip extends React.Component {
   }
 
   searchForMoreEvents = (e) => {
-    console.log("gimme gimme more gimme more gimme gimme more")
+    console.log(this.state.tripLocation)
     this.setState({
       searchEvents: true,
     })
@@ -135,7 +133,6 @@ class Trip extends React.Component {
   }
 
   addMoreEvents = () => {
-    console.log("ADD MORE STUFFS")
     this.setState({
       visible: true,
       renderEditForm: true,
@@ -144,7 +141,6 @@ class Trip extends React.Component {
   }
 
   doneAddingMoreEvents = () => {
-    console.log("All done here- moving along")
     this.setState({
       visible: false,
       renderEditForm: false,
@@ -168,7 +164,7 @@ class Trip extends React.Component {
            visible={this.state.visible}
            width='very wide'
          >
-          <Container style={{marginTop: '7em'}}>
+          <Container style={{ overflow: 'auto', maxHeight:'1000px' , maxWidth: '600px', marginTop: '7em'}}>
             <Divider horizontal>
               <Header as="h4">
               <Icon name="add" />
@@ -219,6 +215,7 @@ class Trip extends React.Component {
               <SearchList
                 returnedBusinesses={this.props.returnedBusinesses}
                 addEventToTrip={this.props.addEventToTrip}
+                events={this.state.events}
               />
               </React.Fragment>
             :
@@ -230,11 +227,11 @@ class Trip extends React.Component {
           <Sidebar.Pusher dimmed={this.state.visible}>
             <Grid columns={2} divided>
               <Grid.Row>
-                <Grid.Column>
+                <Grid.Column  style={{overflow: 'auto', maxHeight: '1000px'}} >
                   <Segment basic>
                     <Container textAlign='center' style={{ marginTop: '5em' }}>
                       <Header as="h1">{this.state.tripLocation}</Header>
-                      <i>{this.state.myTripStartDate} - {this.state.myTripEndDate}</i>
+                      <i>{moment(this.state.myTripStartDate).format("MM/DD/YYYY")} - {moment(this.state.myTripEndDate).format("MM/DD/YYYY")}</i>
                     </Container>
                     <Container style={{ marginTop: '3em' }}>
                       <Item.Group divided>
@@ -242,8 +239,8 @@ class Trip extends React.Component {
                       </Item.Group>
                     </Container>
                     <Container text style={{ marginTop: '3em' }}>
-                      <Button onClick={()=>this.props.clearLocation()}as={Link} to={"/dashboard"}>Done</Button>
-                      <Button onClick={()=>this.addMoreEvents()}>Add more!</Button>
+                      <Button color='google plus' onClick={()=>this.props.clearLocation()}as={Link} to={"/dashboard"}>Done</Button>
+                      <Button color='google plus' onClick={()=>this.addMoreEvents()}>Add more!</Button>
                     </Container>
                   </Segment>
                 </Grid.Column>

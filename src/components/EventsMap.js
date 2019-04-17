@@ -1,46 +1,38 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Map, GoogleApiWrapper, Marker } from "google-maps-react"
 import { GOOG_KEY } from '../keys'
 
 const mapStyles = {
-  width: "700px",
-  height: "900px",
-  marginTop: '5em'
+  width: "85%",
+  height: "85%",
+  marginTop: '5em',
+  horizontalAlign: 'centered'
 }
 
-class EventsMap extends Component {
+class EventsMap extends React.PureComponent {
 
   constructor(props){
     super(props)
     console.log(props)
     this.state = {
-      latitude: 40.7128,
-      longitude: -74.0060
+      latitude: 0,
+      longitude: 0
     }
   }
 
-  componentDidMount = () => {
-    console.log(this.props.events[0])
-    if (this.props.events.length > 0) {
-      console.log('fired');
+  componentDidUpdate = (prevProps, prevState) => {
+    if (prevProps.latitude !== this.state.latitude) {
       this.setState({
         latitude: this.props.events[0].latitude,
         longitude: this.props.events[0].longitude
-      },()=> console.log(this.state.latitude, this.state.longitude))
+      })
     }
   }
 
   renderMarkers = () => {
-    // console.log(this.props.events)
-    // console.log(this.props.events[0])
     return this.props.events.map(event => {
       return <Marker key={event.id} title={event.name} name={event.name} position={{lat: event.latitude, lng: event.longitude}}/>
     })
-  }
-
-  renderInitialCenter = () => {
-    // console.log(this.props.events)
-    // return {lat:parseInt(this.props.events[0].latitude), lng: parseInt(this.props.events[0].longitude)}
   }
 
   render(){

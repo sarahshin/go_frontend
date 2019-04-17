@@ -90,12 +90,10 @@ class App extends Component {
   }
 
   handleStartDate = (date) => {
-    // let startdate = moment(date).format('MM/DD/YYYY')
     this.setState({ startdate: date })
   }
 
   handleEndDate = (date) => {
-    // let enddate = moment(date).format('MM/DD/YYYY')
     this.setState({ enddate: date })
   }
 
@@ -265,6 +263,7 @@ class App extends Component {
 
   handleCategorySearch = (searchTerm, location, cat) => {
     const data = {searchTerm: searchTerm, location: location}
+    // debugger
     fetch("http://localhost:3000/api/v1/" + cat, {
       method: "POST",
       headers: {
@@ -275,10 +274,11 @@ class App extends Component {
     })
     .then(res => res.json())
     .then(businesses => {
+      // debugger
       this.setState({
         returnedBusinesses: businesses.businesses,
         searchTerm:""
-      }, () => console.log(this.state.returnedBusinesses))
+      },)
     })
   }
 
@@ -327,7 +327,7 @@ class App extends Component {
     console.log(updatedTrips)
     this.setState({
       myTrips: updatedTrips
-    }, () => this.forceUpdate())
+    })
     fetch(`http://localhost:3000/api/v1/trips/${tripToDelete.id}`, {
       method: "DELETE"
     })
@@ -375,6 +375,10 @@ class App extends Component {
     })
     .then(res => res.json())
     .then(console.log)
+    let updatedBusinesses = this.state.returnedBusinesses.filter(bus => bus !== business)
+    this.setState({
+      returnedBusinesses: updatedBusinesses
+    })
   }
 
   updateEvent = (event) => {
@@ -383,7 +387,6 @@ class App extends Component {
 
   //RENDER**********************************************************************
   render() {
-    // console.log(this.state.myTrips)
     return (
       <div className="App">
         <Menu fixed='top'inverted size="large">
@@ -421,11 +424,13 @@ class App extends Component {
         />
         <Route path="/dashboard"
           render={(props) => <Dashboard
+            {...props}
             myTrips={this.state.myTrips}
             upcomingTrips={this.state.upcomingTrips}
             pastTrips={this.state.pastTrips}
             deleteThisTrip={this.deleteThisTrip}
             today={this.state.today}
+            setTripLocation={this.setTripLocation}
           />}
         />
         <Route path="/trips/:id"
