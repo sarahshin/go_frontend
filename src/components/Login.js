@@ -1,7 +1,8 @@
 import React from "react";
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
+import smallLogo from './smallgogologo.png'
 
-import { Form, Button, Header, Container } from 'semantic-ui-react'
+import { Form, Button, Header, Grid, Message, Image } from 'semantic-ui-react'
 
 
 class Login extends React.Component {
@@ -33,31 +34,50 @@ class Login extends React.Component {
       return <Redirect to="/"/>
     }
     return (
-      <Container text style={{ marginTop: '7em' }}>
-        <Form>
-          <Header as="h3">Log In</Header>
-          <Form.Field>
-            <label>E-mail</label>
-            <input
-              onChange={(e) => this.props.handleChange(e)}
-              name="email"
-              value={this.props.email}
-              placeholder='E-mail'
-            />
-          </Form.Field>
-          <Form.Field>
-            <label>Password</label>
-            <input
-              onChange={(e) => this.props.handleChange(e)}
-              type="password"
-              name="password"
-              value={this.props.password}
-              placeholder='Password'
-            />
-          </Form.Field>
-          <Button type='submit' onClick={this.handleLogin}>Log In</Button>
-        </Form>
-      </Container>
+      <div>
+      <style>{`
+        body > div,
+        body > div > div,
+        body > div > div > div.login-form {
+          height: 100%;
+        }
+      `}
+      </style>
+      <Grid textAlign='center' style={{ height: '100%', marginTop: "7em" }} verticalAlign='middle'>
+        <Grid.Column style={{ maxWidth: 450 }}>
+          <Form size="large" style={{marginTop: "7em"}}>
+            <Image src={smallLogo} avatar/>
+            <Header as="h2" color="yellow">Log In</Header>
+            <Form.Field>
+              <Form.Input
+                fluid icon='user'
+                iconPosition='left'
+                placeholder='E-mail address'
+                onChange={(e) => this.props.handleChange(e)}
+                name="email"
+                value={this.props.email}
+              />
+            </Form.Field>
+            <Form.Field>
+              <Form.Input
+                fluid
+                icon='lock'
+                iconPosition='left'
+                placeholder='Password'
+                type='password'
+                onChange={(e) => this.props.handleChange(e)}
+                name="password"
+                value={this.props.password}
+              />
+            </Form.Field>
+            <Button color="yellow" fluid size = 'large' type='submit' onClick={this.handleLogin}>Log In</Button>
+          </Form>
+          <div style={{ marginTop: '1.5em'}}>
+            <Message>Don't have an account? <Link to="/signup">Sign up here!</Link></Message>
+          </div>
+        </Grid.Column>
+      </Grid>
+      </div>
     )
   }
 }

@@ -1,8 +1,10 @@
-import React, {createRef} from "react";
+import React from "react";
 import Event from './Event'
 import SearchList from './SearchList'
+import EventsMap from './EventsMap'
 import { Link } from "react-router-dom";
-import { Item, Header, Container, Button, Sidebar, Segment, Divider, Icon, Form, Dropdown, Image } from 'semantic-ui-react'
+import moment from 'moment'
+import { Item, Header, Container, Button, Sidebar, Segment, Divider, Icon, Form, Dropdown, Grid } from 'semantic-ui-react'
 
 const catOptions = [
   {
@@ -44,19 +46,22 @@ class Trip extends React.Component {
     super(props)
     this.state = ({
       events: [],
+      myTripStartDate: "",
+      myTripEndDate: "",
       tripLocation: "",
       thisUserTrip: "",
       searchEvents: false,
       renderEditForm: false,
       visible: false,
       value: "",
+      eventDate: "",
+      eventTime: "",
     })
   }
 
-
   componentDidMount(){
-    console.log(this.props.match)
     this.fetchEvents()
+    this.fetchUserTrips()
   }
   //FETCH***********************************************************************
   fetchEvents = () => {
@@ -64,11 +69,27 @@ class Trip extends React.Component {
     .then(res => res.json())
     .then(events => {
       let myEvents = events.filter(event => event.user_trip.trip_id === parseInt(this.props.match.params.id))
+      let myTrip = this.props.myTrips.filter(trip => trip.id === parseInt(this.props.match.params.id))
+      let myTripLocation = myTrip[0].location
+      let myTripStartDate = myTrip[0].startdate
+      let myTripEndDate = myTrip[0].enddate
       this.setState({
         events: myEvents,
-        tripLocation: myEvents[0].user_trip.trip.location,
-        thisUserTrip: myEvents[0].user_trip
-      }, ()=> this.props.setTripLocation(this.state.tripLocation, this.state.thisUserTrip))
+        tripLocation: myTripLocation,
+        myTripStartDate: myTripStartDate,
+        myTripEndDate: myTripEndDate,
+      }, console.log(this.state.events))
+    })
+  }
+
+  fetchUserTrips = () => {
+    fetch("http://localhost:3000/api/v1/user_trips")
+    .then(res => res.json())
+    .then(user_trips => {
+      let myUserTrip = user_trips.filter(user_trip => user_trip.trip_id === parseInt(this.props.match.params.id) && user_trip.user_id === parseInt(localStorage.id))
+      this.setState({
+        thisUserTrip: myUserTrip[0]
+      }, ()=> this.props.setUserTrip(this.state.thisUserTrip))
     })
   }
 
@@ -83,10 +104,18 @@ class Trip extends React.Component {
     })
   }
 
+  handleEventDate = (date) => {
+    this.setState({ eventDate: date })
+  }
+
+  handleEventTime = (time) => {
+    console.log(time)
+  }
+
   //HELPER FUNCTIONS************************************************************
   renderEvents = () => {
     return this.state.events.map(event => {
-      return <Event key={event.id} tripEvent={event} removeEvent={this.removeEvent}/>
+      return <Event key={event.id} tripEvent={event} removeEvent={this.removeEvent} handleEventDate={this.handleEventDate} handleEventTime={this.handleEventTime} myTripStartDate={this.state.myTripStartDate} myTripEndDate={this.state.myTripEndDate} />
     })
   }
 
@@ -96,7 +125,7 @@ class Trip extends React.Component {
   }
 
   searchForMoreEvents = (e) => {
-    console.log("gimme gimme more gimme more gimme gimme more")
+    console.log(this.state.tripLocation)
     this.setState({
       searchEvents: true,
     })
@@ -104,15 +133,14 @@ class Trip extends React.Component {
   }
 
   addMoreEvents = () => {
-    console.log("ADD MORE STUFFS")
     this.setState({
       visible: true,
       renderEditForm: true,
     })
+    window.scrollTo(0,0)
   }
 
   doneAddingMoreEvents = () => {
-    console.log("All done here- moving along")
     this.setState({
       visible: false,
       renderEditForm: false,
@@ -126,7 +154,7 @@ class Trip extends React.Component {
   render() {
     const { value } = this.state.value
     return (
-      <div className="">
+      <div className="tripPage">
       <Sidebar.Pushable as={Segment}>
         <Sidebar
            animation='overlay'
@@ -136,7 +164,7 @@ class Trip extends React.Component {
            visible={this.state.visible}
            width='very wide'
          >
-          <Container style={{marginTop: '7em'}}>
+          <Container style={{ overflow: 'auto', maxHeight:'1000px' , maxWidth: '600px', marginTop: '7em'}}>
             <Divider horizontal>
               <Header as="h4">
               <Icon name="add" />
@@ -187,6 +215,7 @@ class Trip extends React.Component {
               <SearchList
                 returnedBusinesses={this.props.returnedBusinesses}
                 addEventToTrip={this.props.addEventToTrip}
+                events={this.state.events}
               />
               </React.Fragment>
             :
@@ -196,20 +225,32 @@ class Trip extends React.Component {
         </Sidebar>
 
           <Sidebar.Pusher dimmed={this.state.visible}>
-            <Segment basic>
-              <Container textAlign='center' style={{ marginTop: '5em' }}>
-                <Header as="h1">Points of Interest</Header>
-              </Container>
-              <Container style={{ marginTop: '3em' }}>
-                <Item.Group divided>
-                  {this.renderEvents()}
-                </Item.Group>
-              </Container>
-              <Container text style={{ marginTop: '3em' }}>
-                <Button as={Link} to={"/dashboard"}>Done</Button>
-                <Button onClick={()=>this.addMoreEvents()}>Edit this Trip!</Button>
-              </Container>
-            </Segment>
+            <Grid columns={2} divided>
+              <Grid.Row>
+                <Grid.Column  style={{overflow: 'auto', maxHeight: '1000px'}} >
+                  <Segment basic>
+                    <Container textAlign='center' style={{ marginTop: '5em' }}>
+                      <Header as="h1">{this.state.tripLocation}</Header>
+                      <i>{moment(this.state.myTripStartDate).format("MM/DD/YYYY")} - {moment(this.state.myTripEndDate).format("MM/DD/YYYY")}</i>
+                    </Container>
+                    <Container style={{ marginTop: '3em' }}>
+                      <Item.Group divided>
+                        {this.renderEvents()}
+                      </Item.Group>
+                    </Container>
+                    <Container text style={{ marginTop: '3em' }}>
+                      <Button color='google plus' onClick={()=>this.props.clearLocation()}as={Link} to={"/dashboard"}>Done</Button>
+                      <Button color='google plus' onClick={()=>this.addMoreEvents()}>Add more!</Button>
+                    </Container>
+                  </Segment>
+                </Grid.Column>
+                <Grid.Column>
+                  <Container text >
+                    <EventsMap events={this.state.events}/>
+                  </Container>
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
           </Sidebar.Pusher>
         </Sidebar.Pushable>
       </div>

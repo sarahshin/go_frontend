@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { Form, Button, Header, Container, Dropdown } from 'semantic-ui-react'
+import { Form, Button, Header, Grid, Dropdown } from 'semantic-ui-react'
 
 const catOptions = [
   {
@@ -44,21 +44,27 @@ class SearchForm extends React.Component {
     this.props.setCategoryState(value)
   }
 
+  handleDoneBtnClick = (e) => {
+
+  }
+
   render() {
     const { value } = this.state
 
     return (
       <div>
-        <Container style={{ marginTop: '7em' }}>
-        <Form>
-          <Header as="h3">Search</Header>
+        <Grid textAlign='center' style={{ height: '100%', marginTop: "7em" }} verticalAlign='middle'>
+        <Grid.Column style={{ maxWidth: 450 }}>
+        <Form size="large" style={{marginTop: "7em"}}>
+          <Header as="h2" color="yellow">Search</Header>
           <Form.Field>
-            <label>Search Term:</label>
-            <input
+            <Form.Input
+              fluid icon='search'
+              iconPosition='left'
+              placeholder='things to eat, places to go, things to see'
               onChange={(e) => this.props.handleChange(e)}
               name="searchTerm"
               value={this.props.searchTerm}
-              placeholder='things to eat, places to go, things to see'
             />
           </Form.Field>
           <Form.Field>
@@ -75,17 +81,20 @@ class SearchForm extends React.Component {
           </Form.Field>
           <Form.Field>
             <label>Location</label>
-            <input
+            <Form.Input
+              fluid icon="world"
+              iconPosition="left"
               name="location"
               readOnly
               value={this.props.location}
               placeholder={this.props.location}
             />
           </Form.Field>
-          <Button type='submit' onClick={this.props.handleSubmit}>Search</Button>
+          <Button color="yellow" fluid size = 'large' type='submit' onClick={this.props.handleSubmit}>Search</Button>
         </Form>
-        <Button style={{ marginTop: '1em' }} onClick={this.handleDoneBtnClick} as={Link} to={"/trips/"+this.props.usertrip.trip_id}>Done with Selections</Button>
-        </Container>
+        <Button basic color="yellow" fluid size = 'large' style={{ marginTop: '1em' }} onClick={this.props.clearReturn} as={Link} to={"/trips/"+this.props.usertrip.trip_id}>Done with Selections</Button>
+        </Grid.Column>
+        </Grid>
       </div>
     )
   }

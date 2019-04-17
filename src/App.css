@@ -40,6 +40,15 @@ div.ui.overlay.right.very.wide.visible.sidebar {
   background-color: whitesmoke;
 }
 
-/* .ui.card .content img, .ui.cards>.card .content img {
-  height: 35%;
-} */
+.tripPage  {
+  height: 100%;
+}
+
+div.ui.yellow.card {
+  box-shadow: 0 0 0 1px #d4d4d5, 5px 5px 0px 0px #fbbd08, 1px 1px 3px 0 #d4d4d5 !important
+}
+
+h1.ui.header {
+  font-family: 'Permanent Marker', cursive;
+  letter-spacing: 5px;
+}

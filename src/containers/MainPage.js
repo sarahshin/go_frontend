@@ -1,13 +1,13 @@
 import React from "react"
-import { Header, Container } from "semantic-ui-react"
-// import { Navbar, NavItem } from "react-materialize"
+import { Container, Image } from "semantic-ui-react"
+import logo from './gogologo.png'
 
 const MainPage = () => {
   return (
   <div className="">
     <Container text style={{ marginTop: '7em' }}>
-      <Header as='h1' inverted color="red">GoGoGo</Header>
-      <p>A travel planning app.</p>
+      <Image src={logo} centered />
+      <i>A travel planning app</i>
     </Container>
   </div>
   )
