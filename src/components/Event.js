@@ -1,6 +1,6 @@
 import React from "react"
-import CalendarDateTime from "./CalendarDateTime"
-import { Item, Button, Image, Grid, Icon } from 'semantic-ui-react'
+// import CalendarDateTime from "./CalendarDateTime"
+import { Item, Button, Image, Icon } from 'semantic-ui-react'
 
 
 const Event = ({ tripEvent, removeEvent, handleEventTime, handleEventDate, myTripStartDate, myTripEndDate }) => {

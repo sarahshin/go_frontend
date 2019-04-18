@@ -1,5 +1,6 @@
 import React from "react"
 import { Card, Image, Button } from "semantic-ui-react"
+import ReactStars from 'react-stars'
 import uuid from 'uuid'
 
 const SearchItem = ({ business, addEventToTrip, usertrip }) => {
@@ -10,18 +11,24 @@ const SearchItem = ({ business, addEventToTrip, usertrip }) => {
     })
   }
 
-  // const handleAdd = (restaurant) => {
-  //   addEventToTrip(restaurant)
-  // }
-
   return (
       <Card color="yellow">
         <Card.Content>
         <Card.Header>{business.name}</Card.Header>
           <Image src={business.image_url} alt="image"/>
           <Card.Meta>
-            <span>{business.price}</span>
-            <span>{business.rating}</span>
+            <div className="price">
+              {business.price}
+            </div>
+            <div className="stars">
+            <ReactStars
+              count={5}
+              value={business.rating}
+              half
+              size={16}
+              color2={'#FEBB1B'}
+            />
+            </div>
           </Card.Meta>
           <Card.Description>{displayAddress()}</Card.Description>
           <Card.Description><a href={business.url}>view on yelp</a></Card.Description>

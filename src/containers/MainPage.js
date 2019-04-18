@@ -1,5 +1,5 @@
 import React from "react"
-import { Grid, Image, Segment, Header } from "semantic-ui-react"
+import { Grid, Image, Segment } from "semantic-ui-react"
 import {Animated} from "react-animated-css";
 import logo from './gogologo.png'
 

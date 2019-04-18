@@ -36,6 +36,7 @@ class App extends Component {
     justLoggedOut: false,
     allUserTrips: [],
     today: "",
+    uselessToggle: false,
   }
 
   componentDidMount(){
@@ -322,15 +323,19 @@ class App extends Component {
   }
 
   deleteThisTrip = (tripToDelete) => {
-    console.log("delete this trip", tripToDelete)
-    let updatedTrips = this.state.myTrips.filter(trip => trip !== tripToDelete)
-    console.log(updatedTrips)
-    this.setState({
-      myTrips: updatedTrips
-    })
     fetch(`http://localhost:3000/api/v1/trips/${tripToDelete.id}`, {
       method: "DELETE"
     })
+    let updatedTrips = this.state.myTrips.filter(trip => trip !== tripToDelete)
+    let upcomingTrips = updatedTrips.filter(trip => moment(trip.startdate).diff(this.state.today, 'days') > 0)
+    let pastTrips = updatedTrips.filter(trip => parseInt(moment(trip.startdate).diff(this.state.today, 'days')) <= 0)
+    console.log(updatedTrips)
+    this.setState({
+      myTrips: updatedTrips,
+      upcomingTrips,
+      pastTrips,
+      uselessToggle: !this.state.uselessToggle
+    },() => console.log(this.state))
   }
 
   clearReturn = () => {
