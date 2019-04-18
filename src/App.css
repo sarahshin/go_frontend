@@ -52,3 +52,8 @@ h1.ui.header {
   font-family: 'Permanent Marker', cursive;
   letter-spacing: 5px;
 }
+
+.stars{
+  text-align: center;
+  display: inline-block;
+}
