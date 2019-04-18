@@ -1,14 +1,22 @@
 import React from "react"
-import { Container, Image } from "semantic-ui-react"
+import { Grid, Image, Segment, Header } from "semantic-ui-react"
+import {Animated} from "react-animated-css";
 import logo from './gogologo.png'
 
 const MainPage = () => {
   return (
   <div className="">
-    <Container text style={{ marginTop: '7em' }}>
-      <Image src={logo} centered />
-      <i>A travel planning app</i>
-    </Container>
+    <Segment style={{ padding: '8em 0em' }} vertical>
+      <Grid container stackable verticalAlign='middle'>
+        <Grid.Row>
+          <Grid.Column width={16}>
+          <Animated animationIn="tada" isVisible={true}>
+            <Image src={logo} centered style={{ height: "600px", width: "600px"}}/>
+          </Animated>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+    </Segment>
   </div>
   )
 }

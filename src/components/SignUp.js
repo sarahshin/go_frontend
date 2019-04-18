@@ -1,6 +1,8 @@
 import React from "react";
 import { Form, Button, Header, Grid, Message, Image } from 'semantic-ui-react'
 import { Redirect, Link } from "react-router-dom";
+import {Animated} from "react-animated-css";
+
 import smallLogo from './smallgogologo.png'
 
 class SignUp extends React.Component {
@@ -26,6 +28,7 @@ class SignUp extends React.Component {
     }
     return (
     <div className="signup">
+    <Animated animationIn="flipInX" isVisible={true}>
       <Grid textAlign='center' style={{ height: '100%', marginTop: "7em" }} verticalAlign='middle'>
         <Grid.Column style={{ maxWidth: 450 }}>
           <Form size="large" style={{marginTop: "5em"}}>
@@ -80,6 +83,7 @@ class SignUp extends React.Component {
           </div>
         </Grid.Column>
       </Grid>
+      </Animated>
     </div>
     )
   }
